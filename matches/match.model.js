@@ -42,8 +42,23 @@ const matchSchema = new Schema(
       required: true,
     },
   },
-  { timestamps: true }
+  {
+    timestamps: true,
+    toJSON: { virtuals: true },
+  }
 );
+
+matchSchema.virtual("day").get(function () {
+  return this.startTime.getDate();
+});
+
+matchSchema.virtual("month").get(function () {
+  return this.startTime.getMonth() + 1;
+});
+
+matchSchema.virtual("year").get(function () {
+  return this.startTime.getFullYear();
+});
 
 matchSchema.pre("findByIdAndUpdate", function (next) {
   this.options.runValidators = true;

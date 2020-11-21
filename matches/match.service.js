@@ -57,7 +57,13 @@ exports.matchService = {
 
   getAll() {
     return catchAsync(async (req, res) => {
-      const matches = await Match.find();
+      const queryObj = { ...req.query };
+      console.log(queryObj);
+      const excludedFields = ["page", "limit", "sort", "fields"];
+      excludedFields.forEach(el => delete queryObj[el]);
+
+      const matches = await Match.find(queryObj).sort({ startTime: 1 });
+
       res.status(200).json({ status: "success", data: matches });
     });
   },
@@ -88,7 +94,7 @@ exports.matchService = {
       if (!match)
         return next(new AppError("cannot find doc with that id", 404));
 
-      res.status(201).json({ status: "success", data: match });
+      res.status(200).json({ status: "success", data: match });
     });
   },
 };
