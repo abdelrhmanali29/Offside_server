@@ -2,13 +2,14 @@
 const dotenv = require("dotenv");
 require("dotenv").config({ path: __dirname + "/.env" });
 const express = require("express");
+const cors = require("cors");
 const matchRouter = require("./matches/match.routes");
 const errorHandler = require("./middleware/errorhandler");
 
 const app = express();
 
 app.use(express.json());
-
+app.use(cors());
 app.use("/matches", matchRouter);
 
 app.use(errorHandler);

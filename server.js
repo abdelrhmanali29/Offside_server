@@ -4,7 +4,7 @@ require("dotenv").config({ path: __dirname + "/.env" });
 
 const dbUrl = process.env.DB_URI;
 
-const port = 3002;
+const port = 3006;
 connect(dbUrl)
   .then(() => {
     app.listen(port, function () {

@@ -62,7 +62,12 @@ exports.matchService = {
       const excludedFields = ["page", "limit", "sort", "fields"];
       excludedFields.forEach(el => delete queryObj[el]);
 
-      const matches = await Match.find(queryObj).sort({ startTime: 1 });
+      let queryStr = JSON.stringify(queryObj);
+      queryStr = queryStr.replace(/\b(gte|gt|lte|lt)\b/g, mat => `$${mat}`);
+
+      const matches = await Match.find(JSON.parse(queryStr)).sort({
+        startTime: 1,
+      });
 
       res.status(200).json({ status: "success", data: matches });
     });

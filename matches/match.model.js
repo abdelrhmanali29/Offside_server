@@ -60,6 +60,12 @@ matchSchema.virtual("year").get(function () {
   return this.startTime.getFullYear();
 });
 
+matchSchema.virtual("status").get(function () {
+  if (this.endTime <= new Date()) return "finished";
+  if (this.isActive && this.startTime <= new Date()) return "live";
+  else if (this.startTime > new Date()) return "soon";
+});
+
 matchSchema.pre("findByIdAndUpdate", function (next) {
   this.options.runValidators = true;
   next();
