@@ -1,0 +1,182 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "version": "1.0.0",
+    "title": "offside ",
+    "description": "offside is a web site for sports stats"
+  },
+  "tags": [
+    {
+      "name": "Matches",
+      "description": "Matches endpoints"
+    }
+  ],
+  "paths": {
+    "/matches": {
+      "post": {
+        "tags": [
+          "Matches"
+        ],
+        "summary": "Create new match",
+        "operationId": "createMatch",
+        "responses": {
+          "201": {
+            "description": "Created Successfully"
+          },
+          "400": {
+            "description": "Bad request"
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Match"
+              }
+            }
+          },
+          "description": "Updated user object",
+          "required": true
+        }
+      },
+      "get": {
+        "tags": [
+          "Matches"
+        ],
+        "summary": "Get matches",
+        "operationId": "getMatches",
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string"
+                    },
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/Match"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/matches/{matchId}": {
+      "delete": {
+        "tags": [
+          "Matches"
+        ],
+        "summary": "Delete match",
+        "operationId": "deleteMatch",
+        "parameters": [
+          {
+            "name": "matchId",
+            "in": "path",
+            "description": "Match id to delete",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "no content"
+          }
+        }
+      },
+      "patch": {
+        "tags": [
+          "Matches"
+        ],
+        "summary": "Update match",
+        "operationId": "updateMatch",
+        "parameters": [
+          {
+            "name": "matchId",
+            "in": "path",
+            "required": true,
+            "description": "Match id to update",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Match"
+              }
+            }
+          },
+          "description": "Updated user object",
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Updated Successfully"
+          },
+          "400": {
+            "description": "Bad request"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Match": {
+        "type": "object",
+        "properties": {
+          "homeTeam": {
+            "type": "string"
+          },
+          "awayTeam": {
+            "type": "string"
+          },
+          "startTime": {
+            "type": "string",
+            "format": "date",
+            "example": "2020-11-23T19:00:00.000Z"
+          },
+          "endTime": {
+            "type": "string",
+            "format": "date",
+            "example": "2020-11-23T21:00:00.000Z"
+          },
+          "duration": {
+            "type": "integer"
+          },
+          "homeTeamScore": {
+            "type": "integer"
+          },
+          "awayTeamScore": {
+            "type": "integer"
+          },
+          "isActive": {
+            "type": "boolean"
+          },
+          "league": {
+            "type": "string"
+          }
+        }
+      }
+    }
+  },
+  "servers": [
+    {
+      "description": "Try it Now",
+      "url": "http://localhost:3006/"
+    }
+  ]
+}
