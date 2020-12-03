@@ -1,6 +1,9 @@
 const { formatDistanceWithOptions } = require('date-fns/fp');
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
+const validator = require('validator');
+const uniqueValidator = require('mongoose-unique-validator');
+const bcrypt = require('bcryptjs');
 
 const userSchema = new Schema({
   name: {
@@ -9,7 +12,12 @@ const userSchema = new Schema({
   },
   email: {
     type: String,
-    required: [true, 'Please provide your email']
+    unique: true,
+    index: true,
+    select: false,
+    required: [true, 'Please provide your email'],
+    lowercase: true,
+    validate: [validator.isEmail, 'Please provide a valid email']
   },
   password: {
     type: String,
@@ -26,6 +34,23 @@ const userSchema = new Schema({
     }
   }
 });
+
+userSchema.plugin(uniqueValidator);
+
+userSchema.pre('save', async function (next) {
+  if (!this.isModified('password')) return next();
+
+  this.password = await bcrypt.hash(this.password, 12);
+  this.confirmPassword = undefined;
+  next();
+});
+
+userSchema.methods.correctPassword = async function (
+  candidatePassword,
+  userPassword
+) {
+  return await bcrypt.compare(candidatePassword, userPassword);
+};
 
 const User = mongoose.model('User', userSchema);
 
